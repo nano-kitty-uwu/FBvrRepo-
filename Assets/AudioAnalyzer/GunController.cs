@@ -25,7 +25,7 @@ public class GunController : MonoBehaviour
 
 	void PerformTriggerage()
 	{ 
-		if(spectrumValue>0) transform.localScale = new Vector3(0.1f,spectrumValue*10,0.1f);
+		if(spectrumValue>0) transform.localScale = new Vector3(0.1f,spectrumValue*2,0.1f);
 		if(triggered )
 		{
 			Debug.Log("Band: "+_id.ToString()+" triggered with value: "+spectrumValue.ToString());
