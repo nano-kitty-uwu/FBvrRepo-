@@ -1,32 +1,18 @@
 using System;
 using UnityEngine;
 
-public class EventExtractor : MonoBehaviour
+public static class EventExtractor
 {
-	private float[] spectrumData;
+	static int selectedIndex;
 
-    public static EventExtractor Instance { get ; private set; }
-	private void Awake()
+	public static event Action<int, float> OnAmplitudeReached;
+	public static void AmplitudeReached(int index, float amp)
 	{
-		if (Instance == null) Instance = this;
-		else Destroy(gameObject);
+		OnAmplitudeReached?.Invoke(index,amp);
 	}
-
-	public class BandSettings
+	public static event Action<int, float> OnAmplitudeDeficit;
+	public static void AmplitudeDeficit(int index, float amp)
 	{
-		public int bandIndex;
-		public float triggerOn;
-		public float triggerOff;
-	}
-	public BandSettings[] bandSettings= new BandSettings[8];
-
-	public event Action<int, float> OnTriggerOn;
-	public event Action<int, float> onTriggerOff;
-
-	private void FixedUpdate()
-	{
-		for(int i=0;  i<bandSettings.Length; i++)
-		{
-		}
+		OnAmplitudeDeficit?.Invoke(index, amp);
 	}
 }

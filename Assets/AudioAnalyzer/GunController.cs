@@ -1,38 +1,23 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.AffordanceSystem.Receiver.Primitives;
 
 public class GunController : MonoBehaviour
 {
-	[SerializeField] int _id;
-	[SerializeField] float triggerOn;
-	[SerializeField] float triggerOff;
-	bool triggered = false;
-	float spectrumValue=1;
-
-	private void FixedUpdate()
+	public GameObject laserObject;
+	
+	private void OnEnable()
 	{
-		spectrumValue = Analizator._audioBandBuffer[_id];
-
-		if(spectrumValue > triggerOn)
-		{
-			triggered = true;
-		}
-		if(spectrumValue < triggerOff)
-		{
-			triggered = false;
-		}
-		PerformTriggerage();
+		EventExtractor.OnAmplitudeReached += EventExtractor_OnAmplitudeReached;
+		EventExtractor.OnAmplitudeDeficit += EventExtractor_OnAmplitudeDeficit;
 	}
 
-	void PerformTriggerage()
-	{ 
-		if(spectrumValue>0) transform.localScale = new Vector3(0.1f,spectrumValue*2,0.1f);
-		if(triggered )
-		{
-			Debug.Log("Band: "+_id.ToString()+" triggered with value: "+spectrumValue.ToString());
-		}
-		if (!triggered)
-		{
-			Debug.Log("Band: " + _id.ToString() + " untriggerd with value: " + spectrumValue.ToString());
-		}
+	private void EventExtractor_OnAmplitudeDeficit(int arg1, float arg2)
+	{
+		if(laserObject!= null) laserObject.SetActive(false);
+	}
+
+	private void EventExtractor_OnAmplitudeReached(int arg1, float arg2)
+	{
+		if (laserObject != null)laserObject.SetActive(true);
 	}
 }
