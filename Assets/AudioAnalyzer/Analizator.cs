@@ -8,10 +8,7 @@ public class Analizator : MonoBehaviour
 {
 	AudioSource _audioSource;
 	float[] triggerValues = new float[8];
-	int selectedBand;
-	float _smoothingFactor=0.06f;
-		//Lower values(0.01-0.05) = slower adaptation, stable triggers
-		//Higher values(0.1-0.3) = quicker response to volume changes
+	public static int selectedBand=7;
 	float[] _samples = new float[512];
 	float[] _freqBand = new float[8];
 	float[] _bandBuffer = new float[8];
@@ -42,7 +39,10 @@ public class Analizator : MonoBehaviour
 
 	private void RecalibrateTriggerValues()
 	{
-		for(int i=0; i < 8;i++)triggerValues[i] = _freqBand[i] * _smoothingFactor + triggerValues[i] * (1f - _smoothingFactor);
+		if (triggerValues[selectedBand] < _audioBandBuffer[selectedBand]) 
+		{
+			triggerValues[selectedBand] = (triggerValues[selectedBand] + _audioBandBuffer[selectedBand])/2;	
+		}
 	}
 
 	private void FireEvensts()
